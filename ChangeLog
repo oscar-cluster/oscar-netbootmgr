@@ -1,3 +1,8 @@
+Version 1.8.1 (Tue Nov 26 2019)
+    * Use /var/lib/tftpboot as default tftp root dir.
+    * Use SystemImager::JConfig to get clients_db_dir.
+    * Port to new SystemImager clients DB dir.
+
 Version 1.8 (Fri Jul 04 2014)
     * Full port to Qt4 (SureDialog.pm and NetBootMgr.pm)
     * initial debian packaging
