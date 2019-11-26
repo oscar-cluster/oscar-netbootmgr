@@ -20,6 +20,8 @@ package netbootlib;
 # $Id: netbootlib.pm 6252 2007-04-13 12:06:10Z focht $
 
 use strict;
+use warnings;
+use SystemImager::JConfig;
 use Exporter;
 our (@ISA,@EXPORT,$VERSION);
 $VERSION = 1.0;
@@ -42,7 +44,7 @@ our %config;
 our %hosts;
 our $verbose;
 
-$config{tftpdir}   = "/tftpboot";
+$config{tftpdir}   = $config->get('pxe','tftp_dir');
 $config{hostdb}    = "SIS";
 $config{refresh}   = 10;
 $config{statuscmd} = "";

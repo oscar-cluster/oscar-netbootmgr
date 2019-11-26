@@ -17,14 +17,14 @@ A network booting node which is able to boot through PXE (for example x86 and
 x86_64 machines) will typically get an IP address from the DHCP server, load
 and start the pxelinux.0 binary. Then it will attempt to load a configuration
 file for pxelinux through tftp from the subdirectory pxelinux.cfg
-(i.e. /tftpboot/pxelinux.cfg). The configuration file name tried first is
+(i.e. /var/lib/tftpboot/pxelinux.cfg). The configuration file name tried first is
 the own IP address written in upper case hexadecimal,
 e.g. 192.0.2.91 -> C000025B. If the file is not found, it will remove the last
 hex digit and try again (i.e. C000025, C00002, C0000, C000, C00, C0, C), and
 finally try loading the config file named "default".
 
 On ia64 systems booting with elilo.efi the configuration file is searched in
-/tftpboot/ and the file names tried will be: C000025B.conf, C000025.conf, ...,
+/var/lib/tftpboot/ and the file names tried will be: C000025B.conf, C000025.conf, ...,
 and finally the default file: elilo.conf.
 
 Netbootmgr provides a simple and configurable GUI for creating and deleting
@@ -61,7 +61,7 @@ REFRESH 10
 # host database: either SIS or a file
 HOSTDB SIS
 # tftp root directory
-TFTPROOT /tftpboot
+TFTPROOT /var/lib/tftpboot
 # next boot action menu entries
 MENU Install:__default__
 MENU LocalBoot:localboot
@@ -96,7 +96,7 @@ gamm3 ia64 192.168.224.204
 
 .TP
 .B TFTPROOT <tftp_root_path>
-root path of the tftp daemon. The default is /tftpboot. pxelinux and elilo.efi
+root path of the tftp daemon. The default is /var/lib/tftpboot. pxelinux and elilo.efi
 configuration files with different boot options must be located in this
 directory.
 

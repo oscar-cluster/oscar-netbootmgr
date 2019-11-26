@@ -2,15 +2,14 @@
 Summary: Manage next network boot action for a cluster
 Name: netbootmgr
 Version: __VERSION__
-Vendor: NEC HPCE
-Release: 3%{?dist}
+Release: 1%{?dist}
 License: GPL
-Packager: Erich Focht <efocht@hpce.nec.com>
+Packager: Olivier Lahaye <olivier.lahaye@cea.fr>
 Source: %{name}-%{version}.tar.bz2
 Group: System Environment/Tools
 BuildArch: noarch
 BuildRoot: %{_tmppath}/%{name}
-BuildRequires: perl-Qt-devel
+#BuildRequires: perl-Qt-devel
 Requires: perl-Qt
 Requires: memtest86+
 #AutoReqProv: no
@@ -46,16 +45,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/netbootmgr.*
 
 %post
-if [ -d /tftpboot ]; then
+if [ -d /var/lib/tftpboot ]; then
    for f in localboot kernel-x memtest86; do
-      if [ ! -f /tftpboot/$f ]; then
-         cp -p /usr/share/netbootmgr/$f /tftpboot
+      if [ ! -f /var/lib/tftpboot/$f ]; then
+         cp -p /usr/share/netbootmgr/$f /var/lib/tftpboot
       fi
    done
    MEMTEST_BIN=$(MEMTEST=( /boot/memtest* ); echo ${MEMTEST[0]})
    if test "$MEMTEST_BIN" != "/boot/memtest*"
    then
-      ln -sf $MEMTEST_BIN /tftpboot/memtest86+
+      ln -sf $MEMTEST_BIN /var/lib/tftpboot/memtest86+
    fi
 fi
 
@@ -64,13 +63,15 @@ fi
 # is being erased
 if [ $1 -eq 0 ]; then
    for f in localboot kernel-x memtest86 memtest86+; do
-      if [ -e /tftpboot/$f ]; then
-         rm -f /tftpboot/$f
+      if [ -e /var/lib/tftpboot/$f ]; then
+         rm -f /var/lib/tftpboot/$f
       fi
    done
 fi
 
 %changelog
+* Tue Nov 26 2019 Olivier Lahaye 1.8.1-1
+- Use /var/lib/tftpboot for tftp root directory.
 * Fri Jul  9 2014 Olivier Lahaye 1.8-3
 - Now use "make and make install".
 - Now BuildRequires perl-Qt-devel for puic4 ui compiler.
