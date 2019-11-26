@@ -2,42 +2,61 @@
 #
 # $Id: si_status 5969 2006-12-11 16:55:23Z focht $
 #
-# Copyright (c) 2006 Erich Focht <efocht@hpce.nec.com>
+# Copyright (c) 2019 Olivier Lahaye <olivier.lahaye@cea.fr>
+# Mostly rewriten from scratch for new systemimager.
+# Original code (c)2006 Erich Focht <efocht@hpce.nec.com>
 #
 
 use strict;
-use XML::Simple;
+use warnings;
+use SystemImager::JConfig;
+use File::Slurp;
+use JSON;
 use Fcntl ':flock';
-
+use vars qw($config);
 
 # Define lock files.
 my $lock_file = "/var/lock/systemimager/db.si_monitor.lock";
-my $dbfile = "/var/lib/systemimager/clients.xml";
+my $clients_db_dir = $config->get('monitor','clients_db_dir');
 
 # exit if files not found
-exit 1 if (!-f $lock_file || !-f $dbfile);
+exit 1 if (!-f $lock_file || !-d $clients_db_dir);
 
 # Open and read lock the database.
 open(LOCK, ">", "$lock_file") or
     die "error: cannot open lock file \"$lock_file\"!\n";
 flock(LOCK, LOCK_SH);
 
-my $xml = XMLin($dbfile, KeyAttr => {client => 'host'}, ForceArray => 1);
+# Read all clients *_def.json
+my @clients = ();
+foreach my $client_def_file (<$clients_db_dir/*_def.json>) {
+    my $client_json_txt = read_file($client_def_file, { err_mode => 'quiet'} );
+    print STDERR "ERROR: Can't read $client_def_file\n" if (! defined($client_json_txt));
+    eval {
+        my $client_def = decode_json($client_json_txt);
+	push(@clients, {host => $client_def->{'host'}, status => $client_def->{'status'}});
+    } or do {
+        my $err = $@;
+        print STDERR "ERROR: Failed to decode $client_def_file json file!\n";
+        print STDERR "$err\n";
+    }
+}
 
 # Close and unlock database.
 flock(LOCK, LOCK_UN);
 close(LOCK);
 
 # print the translated status one line per host
-for my $h (sort keys %{$xml->{client}}) {
-    print "$h: ".&status($xml->{client}->{$h}->{status})."\n";
+my @sorted_clients = sort { $a->{host} cmp $b->{host} } @clients;
+foreach my $client (@sorted_clients) {
+    print $client->{host}.": ".&status($client->{status})."\n";
 }
 exit 0;
 
 sub status {
     my ($s) = @_;
     my $r;
-    if ($s < 0) {
+    if ($s <= 0) {
 	$r = "error";
     } elsif (($s > 0) && ($s < 100)) {
 	$r = "installing";
@@ -53,6 +72,14 @@ sub status {
 	$r = "rebooting";
     } elsif ($s == 105) {
 	$r = "shutdown";
+    } elsif ($s == 106) {
+	$r = "shell";
+    } elsif ($s == 107) {
+	$r = "extracting";
+    } elsif ($s == 108) {
+	$r = "pre-Install";
+    } elsif ($s == 109) {
+	$r = "post-Install";
     } else {
 	$r = "unknown";
     }
