@@ -72,7 +72,7 @@ fi
 %changelog
 * Tue Nov 26 2019 Olivier Lahaye 1.8.1-1
 - Use /var/lib/tftpboot for tftp root directory.
-* Fri Jul  9 2014 Olivier Lahaye 1.8-3
+* Wed Jul  9 2014 Olivier Lahaye 1.8-3
 - Now use "make and make install".
 - Now BuildRequires perl-Qt-devel for puic4 ui compiler.
 * Fri Jul  4 2014 Olivier Lahaye 1.8-2
