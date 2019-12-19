@@ -44,7 +44,7 @@ our %config;
 our %hosts;
 our $verbose;
 
-$config{tftpdir}   = "/var/lib/tftpboot"
+$config{tftpdir}   = "/var/lib/tftpboot";
 $config{hostdb}    = "SIS";
 $config{refresh}   = 10;
 $config{statuscmd} = "";
