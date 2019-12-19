@@ -59,6 +59,7 @@ sub readConfig {
         next if /^#/;
         chomp;
         s/^\s*//;
+        next if /^$/;
         my ($cmd, $rest) = split;
         if ($cmd eq "REFRESH") {
             if (($rest < 10000) && ($rest > 0)) {
