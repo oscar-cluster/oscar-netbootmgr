@@ -111,7 +111,7 @@ if ($actions) {
 	my $link = $netbootlib::config{nba}{$a};
 	if ($a ne "default_action") {
 	    if ($link ne "__default__") {
-		printf "%-16s %50s\n",$a,"/tftpboot/$link";
+		printf "%-16s %50s\n",$a,$netbootlib::config{tftpdir}."/$link";
 	    } else {
 		printf "%-16s %50s\n",$a,"default (no symlink)";
 	    }

@@ -21,7 +21,7 @@ package netbootlib;
 
 use strict;
 use warnings;
-use SystemImager::JConfig;
+#use SystemImager::JConfig qw($jconfig);
 use Exporter;
 our (@ISA,@EXPORT,$VERSION);
 $VERSION = 1.0;
@@ -44,7 +44,7 @@ our %config;
 our %hosts;
 our $verbose;
 
-$config{tftpdir}   = $config->get('pxe','tftp_dir');
+$config{tftpdir}   = "/var/lib/tftpboot"
 $config{hostdb}    = "SIS";
 $config{refresh}   = 10;
 $config{statuscmd} = "";

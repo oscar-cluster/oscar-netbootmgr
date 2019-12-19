@@ -15,7 +15,7 @@ cat >$CFILE <<EOI
 #HOSTDB SIS
 
 # tftp root directory
-#TFTPROOT /tftpboot
+#TFTPROOT /var/lib/tftpboot
 
 # next boot action menu items
 EOI
@@ -25,11 +25,11 @@ echo "MENU default:__default__" >>$CFILE
 echo "The default boot will usually lead to the reinstallation of the node."
 
 # localboot (for ia32 a,d x86_64, only)
-[ -f /tftpboot/localboot ] || cp /usr/share/netbootmgr/localboot /tftpboot
+[ -f /var/lib/tftpboot/localboot ] || cp /usr/share/netbootmgr/localboot /var/lib/tftpboot
 echo "MENU localboot:localboot" >>$CFILE
 
 # memtest (for ia32 and x86_64, only)
-[ -f /tftpboot/memtest86+-1.26 ] || cp /usr/share/netbootmgr/memtest86+-1.26 /tftpboot
+[ -f /var/lib/tftpboot/memtest86+-1.26 ] || cp /usr/share/netbootmgr/memtest86+-1.26 /var/lib/tftpboot
 echo "MENU memtest86+:memtest86" >>$CFILE
 
 # master boot kernel
@@ -38,7 +38,5 @@ echo "MENU memtest86+:memtest86" >>$CFILE
 # Add install kernels provided by systemimager
 for parch in `ls -1 /usr/share/systemimager/boot`; do
    arch=`basename $parch`
-
-
 done 
 

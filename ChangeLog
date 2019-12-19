@@ -1,3 +1,7 @@
+Version 1.8.2 (Thu Dec 19 2019)
+    * Fix evenmore /tftpboot -> /var/lib/tftpboot
+    * Make sure TFTPBOOT param from config file is used and not tftpboot dir
+    is ardcoded.
 Version 1.8.1 (Tue Nov 26 2019)
     * Use /var/lib/tftpboot as default tftp root dir.
     * Use SystemImager::JConfig to get clients_db_dir.

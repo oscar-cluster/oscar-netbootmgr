@@ -3,8 +3,8 @@
 # Remove installed sample files if last instance of netbootmgr
 # is being erased
 for f in localboot kernel-x memtest86 memtest86+; do
-   if [ -e /tftpboot/$f ]; then
-      rm -f /tftpboot/$f
+   if [ -e /var/lib/tftpboot/$f ]; then
+      rm -f /var/lib/tftpboot/$f
    fi
 done
 
