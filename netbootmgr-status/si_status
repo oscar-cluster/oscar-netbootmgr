@@ -13,11 +13,11 @@ use SystemImager::JConfig;
 use File::Slurp;
 use JSON;
 use Fcntl ':flock';
-use vars qw($config);
+use vars qw($jconfig);
 
 # Define lock files.
 my $lock_file = "/var/lock/systemimager/db.si_monitor.lock";
-my $clients_db_dir = $config->get('monitor','clients_db_dir');
+my $clients_db_dir = $jconfig->get('monitor','clients_db_dir');
 
 # exit if files not found
 exit 1 if (!-f $lock_file || !-d $clients_db_dir);
